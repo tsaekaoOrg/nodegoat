@@ -11,6 +11,7 @@ pipeline {
                 //def mvnHome = '/usr/local/Cellar/maven/3.5.3/libexec/bin'
                 sh 'pwd'
                 sh 'ls -l'
+                sh 'echo $PATH'
                 sh '${npmLocal} --version'
             }
         }
