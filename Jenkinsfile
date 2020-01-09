@@ -9,7 +9,7 @@ pipeline {
                 // mvnHome from 'mvn --version', don't forget the /bin at the end
                 // future, use the tools capability of Pipelines
                 //def mvnHome = '/usr/local/Cellar/maven/3.5.3/libexec/bin'
-                sh 'npm install'
+                sh '${npmLocal} install'
             }
         }
 
