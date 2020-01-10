@@ -49,7 +49,8 @@ pipeline {
                     nodejs(nodeJSInstallationName: 'NodeJS-12.0.0') {
                         //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
                         //sh "curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan --no-upload"
-                        sh "curl -sSL https://download.sourceclear.com/ci.sh | SRCCLR_SCM_URI=https://gitlab.com/veracode-demo-labs/nodegoat.git sh"
+                        sh "curl -sSL https://download.sourceclear.com/ci.sh | sh"
+                        //sh "curl -sSL https://download.sourceclear.com/ci.sh | SRCCLR_SCM_URI=https://gitlab.com/veracode-demo-labs/nodegoat.git sh"
                     }
                 }
             }
