@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        VERACODE_APP_NAME = 'NodeGoat'      // App Name in the Veracode Platform
+    }
+
     stages{
         stage ('config verify') {
             steps {
@@ -22,13 +26,15 @@ pipeline {
 
         stage ('Veracode scan') {
             steps {
-                echo 'zipping'
+                // zip archive for Veracode scanning.  Only include stuff we need,
+                //  aka skip things like node_modules directory
                 zip zipFile: 'upload.zip', archive: false, glob: '*.js,*.json,app/**,artifacts/**,config/**'
+
                 echo 'Veracode scanning'
-               //withCredentials([ usernamePassword ( 
-               //     credentialsId: 'veracode_login', passwordVariable: 'VERACODE_PASSWORD', usernameVariable: 'VERACODE_USERNAME') ]) {
-               //     veracode applicationName: 'SonarQube plugin', criticality: 'VeryHigh', fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "Jenkins pipeline (${veracodeBuildNumber})", uploadExcludesPattern: '', uploadIncludesPattern: '**/target/*.jar', useIDkey: true, vid: "${VERACODE_USERNAME}", vkey: "${VERACODE_PASSWORD}", vpassword: '', vuser: ''
-               //     }      
+                withCredentials([ usernamePassword ( 
+                    credentialsId: 'veracode_login', passwordVariable: 'VERACODE_API_ID', usernameVariable: 'VERACODE_API_KEY') ]) {
+                        veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'upload.zip', useIDkey: true, vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}", vpassword: '', vuser: ''
+                    }      
             }
         }
 
@@ -39,12 +45,14 @@ pipeline {
         }
 
         stage ('Docker-ize') {
+            // when !Windows
             steps {
                 echo 'Docker-izing'
             }
         }
 
         stage ('Deploy') {
+            // when !Windows
             steps {
                 echo 'Deploying to Heroku'
             }
