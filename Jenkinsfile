@@ -45,8 +45,9 @@ pipeline {
         stage ('Veracode SCA') {
             steps {
                 echo 'Veracode SCA'
-                withCredentials([ string(credentialsId: 'SRCCLR_API_TOKEN', variable: 'SRCCLR_API_TOKEN')]) {
-                    sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
+                withCredentials([ string(credentialsId: 'SCA_Token', variable: 'SRCCLR_API_TOKEN')]) {
+                    //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
+                    sh "curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan --no-upload"
                 }
 
                 withCredentials([ string(credentialsId: 'secret_text', variable: 'MY_SECRET')]) {
