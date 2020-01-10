@@ -29,5 +29,23 @@ pipeline {
                //     }      
             }
         }
+
+        stage ('Veracode SCA') {
+            steps {
+                echo 'Veracode SCA'
+            }
+        }
+
+        stage ('Docker-ize') {
+            steps {
+                echo 'Docker-izing'
+            }
+        }
+
+        stage ('Deploy') {
+            steps {
+                echo 'Deploying to Heroku'
+            }
+        }
     }
 }
