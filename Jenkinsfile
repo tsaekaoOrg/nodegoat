@@ -2,20 +2,21 @@ pipeline {
     agent any
 
     stages{
-        stage ('build') {
+        stage ('config verify') {
             steps {
-                //git url: 'file:///Users/krise/my-repositories/sonarqube-veracode'
-
-                // mvnHome from 'mvn --version', don't forget the /bin at the end
-                // future, use the tools capability of Pipelines
-                //def mvnHome = '/usr/local/Cellar/maven/3.5.3/libexec/bin'
                 sh 'pwd'
                 sh 'ls -l'
-                sh 'echo $PATH'
+            }
+        }
+
+        stage ('build') {
+            steps {
+                // use the NodeJS plugin
                 nodejs(nodeJSInstallationName: 'NodeJS-13.6.0') {
                     sh 'npm config ls'
+                    sh 'npm --version'
+                    sh 'npm install'
                 }
-                sh '${npmLocal} --version'
             }
         }
 
