@@ -55,14 +55,14 @@ pipeline {
         }
 
         stage ('Docker-ize') {
-            when { isUnix() }
+            when { expression { isUnix() == true } }
             steps {
                 echo 'Docker-izing'
             }
         }
 
         stage ('Deploy') {
-            when { isUnix() }
+            when { expression { isUnix() == true } }
             steps {
                 echo 'Deploying to Heroku'
             }
