@@ -22,7 +22,9 @@ pipeline {
 
         stage ('Veracode scan') {
             steps {
-                sh 'echo Veracode scanning'
+                echo 'zipping'
+                zip zipFile: 'upload.zip', archive: true
+                echo 'Veracode scanning'
                //withCredentials([ usernamePassword ( 
                //     credentialsId: 'veracode_login', passwordVariable: 'VERACODE_PASSWORD', usernameVariable: 'VERACODE_USERNAME') ]) {
                //     veracode applicationName: 'SonarQube plugin', criticality: 'VeryHigh', fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "Jenkins pipeline (${veracodeBuildNumber})", uploadExcludesPattern: '', uploadIncludesPattern: '**/target/*.jar', useIDkey: true, vid: "${VERACODE_USERNAME}", vkey: "${VERACODE_PASSWORD}", vpassword: '', vuser: ''
