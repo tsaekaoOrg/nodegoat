@@ -12,7 +12,7 @@ pipeline {
         stage ('build') {
             steps {
                 // use the NodeJS plugin
-                nodejs(nodeJSInstallationName: 'NodeJS-12.14.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS-10.0.0') {
                     sh 'npm config ls'
                     sh 'npm --version'
                     sh 'npm install'
