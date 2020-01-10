@@ -23,7 +23,7 @@ pipeline {
         stage ('Veracode scan') {
             steps {
                 echo 'zipping'
-                zip zipFile: 'upload.zip', archive: true
+                zip zipFile: 'upload.zip', archive: false, glob: '*.js,*.json,app/**,artifacts/**,config/**'
                 echo 'Veracode scanning'
                //withCredentials([ usernamePassword ( 
                //     credentialsId: 'veracode_login', passwordVariable: 'VERACODE_PASSWORD', usernameVariable: 'VERACODE_USERNAME') ]) {
