@@ -12,6 +12,9 @@ pipeline {
                 sh 'pwd'
                 sh 'ls -l'
                 sh 'echo $PATH'
+                nodejs(nodeJSInstallationName: 'NodeJS-13.6.0') {
+                    sh 'npm config ls'
+                }
                 sh '${npmLocal} --version'
             }
         }
