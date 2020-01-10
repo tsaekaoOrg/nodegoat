@@ -33,7 +33,7 @@ pipeline {
                 echo 'Veracode scanning'
                 withCredentials([ usernamePassword ( 
                     credentialsId: 'veracode_login', passwordVariable: 'VERACODE_API_ID', usernameVariable: 'VERACODE_API_KEY') ]) {
-                        veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'upload.zip', useIDkey: true, vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}", vpassword: '', vuser: ''
+                        veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, timeout: 20, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'upload.zip', useIDkey: true, vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}", vpassword: '', vuser: ''
                     }      
             }
         }
