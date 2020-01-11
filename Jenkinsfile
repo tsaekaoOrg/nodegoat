@@ -6,8 +6,8 @@ pipeline {
     }
 
     tools {
-       //'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09' 
-       org.jenkinsci.plugins.docker.commons.tools.DockerTool 'docker-latest'
+       'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker-latest' 
+       //org.jenkinsci.plugins.docker.commons.tools.DockerTool 'docker-latest'
     }
 
     stages{
