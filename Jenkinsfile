@@ -10,7 +10,6 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls -la'
-                echo 'Path: $PATH'
             }
         }
 
@@ -72,9 +71,10 @@ pipeline {
             steps {
                 echo 'Docker-izing'
 
-                script {
-                    def myImage = docker.build('nodegoat:snapshot')
-                }
+                sh 'docker version'
+                //script {
+                //    def myImage = docker.build('nodegoat:snapshot')
+               // }
             }
         }
 
