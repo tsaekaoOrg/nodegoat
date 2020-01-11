@@ -5,6 +5,11 @@ pipeline {
         VERACODE_APP_NAME = 'NodeGoat'      // App Name in the Veracode Platform
     }
 
+    tools {
+       //'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09' 
+       docker 'docker-latest'
+    }
+
     stages{
         stage ('environment verify') {
             steps {
