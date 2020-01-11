@@ -72,7 +72,7 @@ pipeline {
                 echo 'Docker-izing'
 
                 script {
-                    def myImage = docker.build
+                    def myImage = docker.build('nodegoat:snapshot')
                 }
             }
         }
