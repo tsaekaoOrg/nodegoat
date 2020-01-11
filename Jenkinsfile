@@ -10,6 +10,7 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls -la'
+                echo 'Path: $PATH'
             }
         }
 
