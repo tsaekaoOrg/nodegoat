@@ -13,7 +13,7 @@ pipeline {
     stages{
         stage ('environment verify') {
             steps {
-                stript {
+                script {
                     if (isUnix() == true) {
                         sh 'pwd'
                         sh 'ls -la'
