@@ -6,8 +6,8 @@ pipeline {
     }
 
     tools {
+        // these match up with 'Manage Jenkins -> Global Tool Config'
        'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker-latest' 
-       //org.jenkinsci.plugins.docker.commons.tools.DockerTool 'docker-latest'
     }
 
     stages{
@@ -71,22 +71,17 @@ pipeline {
             }
         }
 
-        stage ('Docker-ize') {
-            when { expression { isUnix() == true } }
-            steps {
-                echo 'Docker-izing'
-
-                sh 'docker version'
-                //script {
-                //    def myImage = docker.build('nodegoat:snapshot')
-               // }
-            }
-        }
-
+        // only works on *nix, as we're building a Linux image
         stage ('Deploy') {
-            when { expression { isUnix() == true } }
+            when { expression { return (isUnix() == true) } }
             steps {
+                echo 'building Docker image'
+                sh 'docker version'
+                sh 'docker build -t nodegoat:${BUILD_TAG} .'
+
                 echo 'Deploying to Heroku'
+                //https://devcenter.heroku.com/articles/container-registry-and-runtime --> Pushing an existing image
+        
             }
         }
     }
