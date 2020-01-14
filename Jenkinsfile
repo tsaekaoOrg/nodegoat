@@ -13,8 +13,15 @@ pipeline {
     stages{
         stage ('environment verify') {
             steps {
-                sh 'pwd'
-                sh 'ls -la'
+                stript {
+                    if (isUnix() == true) {
+                        sh 'pwd'
+                        sh 'ls -la'
+                    }
+                    else {
+                        bat 'dir'
+                    }
+                }
             }
         }
 
