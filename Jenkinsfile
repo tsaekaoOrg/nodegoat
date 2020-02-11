@@ -55,12 +55,11 @@ pipeline {
 
         stage ('Veracode scan') {
             environment {
-                script {
-                    if(isUnix() == true) {
-                        HOST_OS = 'Unix'
+                HOST_OS = script { if(isUnix() == true) {
+                    return 'Unix'
                     }
                     else {
-                        HOST_OS = 'Windows'
+                        return 'Windows'
                     }
                 }
             }
