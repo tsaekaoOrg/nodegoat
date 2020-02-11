@@ -79,12 +79,13 @@ pipeline {
             steps {
                 echo 'building Docker image'
                 sh 'docker version'
-                sh 'docker build -t nodegoat:${BUILD_TAG} .'
 
-
+                ansiColor('xterm') {
+                    sh 'docker build -t nodegoat:${BUILD_TAG} .'
+                }
+                
                 // split into separate stage??
-                echo 'Deploying to Heroku'
-                //https://devcenter.heroku.com/articles/container-registry-and-runtime --> Pushing an existing image
+                echo 'Deploying ...'
         
             }
         }
