@@ -10,6 +10,11 @@ pipeline {
        'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker-latest' 
     }
 
+    options {
+        // only keep the last 30 build logs and artifacts (for space saving)
+        buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
+    }
+
     stages{
         stage ('environment verify') {
             steps {
@@ -54,25 +59,15 @@ pipeline {
             }
         }
 
-        /* srcclr can't handle a file:// as a git remote, so we need to set the git origin
-            to the GitLab URL for this to work
-        */
         stage ('Veracode SCA') {
             steps {
                 echo 'Veracode SCA'
                 withCredentials([ string(credentialsId: 'SCA_Token', variable: 'SRCCLR_API_TOKEN')]) {
                     nodejs(nodeJSInstallationName: 'NodeJS-12.0.0') {
-                        sh 'git remote show origin'
-                        //sh 'git remote remove origin'
-                        //sh 'git remote add origin https://gitlab.com/veracode-demo-labs/nodegoat.git'
-                        //sh 'git remote show origin'
-                        //sh "curl -sSL https://download.sourceclear.com/ci.sh | sh"
+                        sh "curl -sSL https://download.sourceclear.com/ci.sh | sh"
 
-
+                        // debug, no upload
                         //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
-                        //sh "curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan --no-upload"
-                        
-                        //sh "curl -sSL https://download.sourceclear.com/ci.sh | SRCCLR_SCM_URI=https://gitlab.com/veracode-demo-labs/nodegoat.git sh"
                     }
                 }
             }
@@ -86,6 +81,8 @@ pipeline {
                 sh 'docker version'
                 sh 'docker build -t nodegoat:${BUILD_TAG} .'
 
+
+                // split into separate stage??
                 echo 'Deploying to Heroku'
                 //https://devcenter.heroku.com/articles/container-registry-and-runtime --> Pushing an existing image
         
