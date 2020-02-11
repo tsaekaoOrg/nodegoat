@@ -15,7 +15,7 @@ RUN chown $user:$user --recursive $workdir
 
 # Then all further actions including running the containers should be done under non-root user.
 USER $user
-RUN npm install
+RUN npm install --quiet
 COPY . $workdir
 
 # Permissions need to be reapplied, due to how docker applies root to new files.
