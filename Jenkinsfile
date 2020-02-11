@@ -7,7 +7,7 @@ pipeline {
 
     tools {
         // these match up with 'Manage Jenkins -> Global Tool Config'
-        'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker-latest' 
+        //'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker-latest' 
     }
 
     options {
@@ -22,9 +22,11 @@ pipeline {
                     if (isUnix() == true) {
                         sh 'pwd'
                         sh 'ls -la'
+                        sh 'echo $PATH'
                     }
                     else {
                         bat 'dir'
+                        bat 'set'
                     }
                 }
             }
