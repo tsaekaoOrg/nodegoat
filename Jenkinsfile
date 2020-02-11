@@ -93,7 +93,11 @@ pipeline {
                                 //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
                             }
                             else {
-                                powershell "Set-ExecutionPolicy AllSigned -Scope Process -Force ; iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1')) ; srcclr scan"
+                                powershell '''
+                                            Set-ExecutionPolicy AllSigned -Scope Process -Force
+                                            iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
+                                            srcclr scan --allow-dirty
+                                            '''
                             }
                         }
                     }
