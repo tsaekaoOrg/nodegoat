@@ -75,10 +75,17 @@ pipeline {
                 echo 'Veracode SCA'
                 withCredentials([ string(credentialsId: 'SCA_Token', variable: 'SRCCLR_API_TOKEN')]) {
                     nodejs(nodeJSInstallationName: 'NodeJS-12.0.0') {
-                        sh "curl -sSL https://download.sourceclear.com/ci.sh | sh"
+                        script {
+                            if(isUnix == true) {
+                                sh "curl -sSL https://download.sourceclear.com/ci.sh | sh"
 
-                        // debug, no upload
-                        //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
+                                // debug, no upload
+                                //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
+                            }
+                            else {
+                                powershell "Get-ExecutionPolicy ; Get-Service"
+                            }
+                        }
                     }
                 }
             }
