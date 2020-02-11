@@ -1,118 +1,68 @@
-# NodeGoat
+# Introduction
 
-Being lightweight, fast, and scalable, Node.js is becoming a widely adopted platform for developing web applications. This project provides an environment to learn how OWASP Top 10 security risks apply to web applications developed using Node.js and how to effectively address them.
+This project is designed to show the complete SDLC with all of our Veracode tools used at the appropriate places in the build process.  This complete process will include:
 
-## Getting Started
-OWASP Top 10 for Node.js web applications:
+* building and packaging the app for scanning
+* Veracode scanning of first party code
+* Veracode SCA scanning of third-party code
+* building a Docker image for deployment and Veracode dynamic scanning (coming in the future)
 
-### Know it!
-[Tutorial Guide](http://nodegoat.herokuapp.com/tutorial) explaining how each of the OWASP Top 10 vulnerabilities can manifest in Node.js web apps and how to prevent it.
+This is a Veracode-specific readme file.  For the original, see README-original.md.
 
-### Do it!
-[A Vulnerable Node.js App for Ninjas](http://nodegoat.herokuapp.com/) to exploit, toast, and fix. You may like to [set up your own copy](#how-to-setup-your-copy-of-nodegoat) of the app to fix and test vulnerabilities. Hint: Look for comments in the source code.
-##### Default user accounts
-The database comes pre-populated with these user accounts created as part of the seed data -
-* Admin Account - u:admin p:Admin_123
-* User Accounts (u:user1 p:User1_123), (u:user2 p:User2_123)
-* New users can also be added using the sign-up page.
+# How to use this
 
-## How to Setup Your Copy of NodeGoat
+You have 3 options:
 
-### OPTION 1 - One click install on Heroku
-The the quickest way to get running with NodeGoat is to click the button below to deploy it on Heroku.
+1. build from the existing repo (not making any modifications)
+2. create a copy (fork) the existing repo for the ability to make your own mods and then build your modified copy
+3. just deploy the existing app for dynamic scanning (coming in the future...)
 
-Even though it is not essential, but recommended that you fork this repository and deploy the forked repo.
-This would allow you to fix vulnerabilities in your own forked version, and deploy and test it on heroku.
+## Option 1 - Build from the existing repo
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+The instructions below assume you are building using the Jenkins installed on your Windows machine (2019.4 or later).  Note that it is also possible to build on your Mac or a linux machine (although using the linux instance in the Demo Labs is discouraged due to the size of the disk - the Docker image is ~ 1.2G).
 
-This Heroku instance uses Free ($0/month) node server and MongoLab add-on.
+### 1. Get Jenkins ready
 
-### OPTION 2 - Run NodeGoat on your machine
+You will need the following plugins added to Jenkins, beyond what's already here in the 2019.4 images:
 
-If you do not wish to run NodeGoat on Heroku, please follow these steps to setup and run it locally -
-* Install [Node.js](http://nodejs.org/) - NodeGoat requires Node v4.4 or above
+* Pipeline Utility Steps
+* NodeJS (w/tool config)
+* AnsiColor
 
-* Clone the github repository
-```
-git clone https://github.com/OWASP/NodeGoat.git
-```
+Goto Jenkins --> Manage Jenkins --> Manage Plugins and add these
 
-*go to the directory
-```
-cd NodeGoat
-```
+### 2. Configure the tools
 
-* Install node modules
-```
-npm install
-```
+Goto Jenkins --> Manage Jenkins --> Global Tool Configuration and setup the tools
 
-* Create Mongo DB:
-    You can create a remote MongoDB instance or use local mongod installation
-    * A. Using Remote MongoDB
-        * Create a sandbox mongoDB instance (free) at [mLab](https://mlab.com/plans/pricing/#plan-sandbox)
-        * Create a new database.
-        * Create a user.
-        * Update the `db` property in file `config/env/development.js` to reflect your DB setup. (in format: `mongodb://<username>:<password>@<databasename>`)
-    * OR B.Using local MongoDB
-        * If using local Mongo DB instance, start [mongod](http://docs.mongodb.org/manual/reference/program/mongod/#bin.mongod).
-        * Update the `db` property in file `config/env/development.js` to reflect your DB setup. (in format: `mongodb://localhost:27017/<databasename>`)
+#### 2.1 NodeJS
 
-* Populate MongoDB with seed data required for the app
-    * Run the npm-script below to populate the DB with seed data required for the application. Pass the desired environment as argument. If not passed, "development" is the default:
-```
-npm run db:seed
-```
-* Start server, this starts the NodeGoat application at url [http://localhost:4000/](http://localhost:4000/)
-```
-npm start
-```
+Add a NodeJS installation like the following (the names are important, so match them)
 
-### OPTION 3 - Run NodeGoat on Docker
+<img src=doc/images/NodeJS_config.jpg alt="NodeJS config" />
+![NodeJS config](./doc/images/NodeJS_config.jpg)
 
-**You need to install [docker](https://docs.docker.com/installation/) and [docker compose](https://docs.docker.com/compose/install/) to be able to use this option**
+### 3. Configure Credentials in Jenkins 
 
-The repo includes the Dockerfile and docker-compose.yml necessary to setup the app and the db instance then connect them together.
+#### 3.1 veracode login
 
-* Change the db config in `config/env/development.js` to point to the respective Docker container.
-```
-db: "mongodb://mongo:27017/nodegoat",
-```
-* Build the images:
-```
-docker-compose build
-```
-* Run the app:
-```
-docker-compose up
-```
+#### 3.2 srcclr token
 
 
-#### Customizing the Default Application Configuration
-The default application settings (database url, http port, etc.) can be changed by updating the [config file] (https://github.com/OWASP/NodeGoat/blob/master/config/env/all.js).
+### 4. Create the Jenkins job
 
-## Report bugs, Feedback, Comments
-*  Open a new [issue](https://github.com/OWASP/NodeGoat/issues) or contact team by joining chat at [Slack](https://owasp.slack.com/messages/project-nodegoat/) or [![Join the chat at https://gitter.im/OWASP/NodeGoat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/OWASP/NodeGoat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+### 5. Build w/Jenkins
 
-## Contributing
-Contributions from community are key to make NodeGoat a high quality comprehensive resource. Lets make NodeGoat awesome together!
+## Option 2 - Getting this repo locally
 
-### Ways to Contribute
-Depending on your preference, you can contribute in various ways. Here are tasks planned for [upcoming release](https://github.com/OWASP/NodeGoat/milestones).
-You can also open an issue, sending a PR, or get in touch on [Gitter Chat](https://gitter.im/OWASP/NodeGoat) or [Slack](https://owasp.slack.com/messages/project-nodegoat/)
+Assumes you already have an account on GitHub, GitLab, or a similar service.
 
-If sending PR, once code is ready to commit, run:
-```
-npm run precommit
-```
-This command uses `js-beautifier` to indent the code and verifies these [coding standards](https://github.com/OWASP/NodeGoat/blob/master/.jshintrc) using `jsHint`. Please resolve all `jsHint` errors before committing the code.
+Fork the existing repo into your account, and then use your copy of the repo.  Clone it locally, make mods, and push them back to your account.
 
-## Contributors
-Here are the amazing [contributors](https://github.com/OWASP/NodeGoat/graphs/contributors) to the NodeGoat project.
+### Building w/Jenkins
 
-## Supports
-- Thanks to JetBrains for providing licenses to fantastic [WebStorm IDE](https://www.jetbrains.com/webstorm/) to build this project.
+Follow the steps above, except use your repo instead of the master copy on gitlab.com
 
-## License
-Code licensed under the [Apache License v2.0.](http://www.apache.org/licenses/LICENSE-2.0)
+## Deploying 
+
+Coming...
