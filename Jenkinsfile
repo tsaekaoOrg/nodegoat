@@ -5,10 +5,10 @@ pipeline {
         VERACODE_APP_NAME = 'NodeGoat'      // App Name in the Veracode Platform
     }
 
-    tools {
+    //tools {
         // these match up with 'Manage Jenkins -> Global Tool Config'
         //'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker-latest' 
-    }
+    //}
 
     options {
         // only keep the last 30 build logs and artifacts (for space saving)
