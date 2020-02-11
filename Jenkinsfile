@@ -27,7 +27,7 @@ pipeline {
                     }
                     else {
                         bat 'dir'
-                        bat 'set'
+                        bat 'set %PATH%'
                     }
                 }
             }
@@ -93,6 +93,8 @@ pipeline {
                                 //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
                             }
                             else {
+                                // allow-dirty since I was in the middle of updating the readme files,
+                                //      really not needed
                                 powershell '''
                                             Set-ExecutionPolicy AllSigned -Scope Process -Force
                                             iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
@@ -106,6 +108,7 @@ pipeline {
         }
 
         // only works on *nix, as we're building a Linux image
+        //  uses the natively installed docker
         stage ('Deploy') {
             when { expression { return (isUnix() == true) } }
             steps {
