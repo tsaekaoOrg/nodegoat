@@ -5,6 +5,7 @@ pipeline {
         VERACODE_APP_NAME = 'NodeGoat'      // App Name in the Veracode Platform
     }
 
+    // this is optional on Linux, if jenkins does not have access to your locally installed docker
     //tools {
         // these match up with 'Manage Jenkins -> Global Tool Config'
         //'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker-latest' 
@@ -53,6 +54,16 @@ pipeline {
         }
 
         stage ('Veracode scan') {
+            environment {
+                script {
+                    if(isUnix() == true) {
+                        HOST_OS = 'Unix'
+                    }
+                    else {
+                        HOST_OS = 'Windows'
+                    }
+                }
+            }
             steps {
                 // zip archive for Veracode scanning.  Only include stuff we need,
                 //  aka skip things like node_modules directory
@@ -62,7 +73,7 @@ pipeline {
                 withCredentials([ usernamePassword ( 
                     credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
                         // fire-and-forget 
-                        veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'upload.zip', useIDkey: true, vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
+                        veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}-${HOST_OS}", uploadExcludesPattern: '', uploadIncludesPattern: 'upload.zip', useIDkey: true, vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
 
                         // wait for scan to complete (timeout: x)
                         //veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, timeout: 20, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'upload.zip', useIDkey: true, vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
