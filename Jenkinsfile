@@ -7,7 +7,9 @@ pipeline {
 
     tools {
         // these match up with 'Manage Jenkins -> Global Tool Config'
-       'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker-latest' 
+        if(isUnix() == true) {
+            'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker-latest' 
+        }
     }
 
     options {
