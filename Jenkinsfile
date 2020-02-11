@@ -36,9 +36,18 @@ pipeline {
             steps {
                 // use the NodeJS plugin
                 nodejs(nodeJSInstallationName: 'NodeJS-12.0.0') {
-                    sh 'npm config ls'
-                    sh 'npm --version'
-                    sh 'npm install'
+                    script {
+                        if(isUnix() == true) {
+                            //sh 'npm config ls'
+                            sh 'npm --version'
+                            sh 'npm install'
+                        }
+                        else {
+                            bat 'npm --version'
+                            bat 'npm install'  
+                        }
+                    }
+
                 }
             }
         }
