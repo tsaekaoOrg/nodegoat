@@ -63,7 +63,15 @@ The 'Secret' is the Source Clear token (please use a workspace agent, not an org
 
 ### 4. Create the Jenkins job
 
+Create a Jenkins Pipeline job with the following Pipeline section (you can ignore all the other fields):
+
+![jenkins job](./doc/images/Jenkins_job.jpg)
+
 ### 5. Build w/Jenkins
+
+Click Build Now to run the job.
+
+![jenkins build](./doc/images/Jenkins_build.jpg)
 
 ## Option 2 - Getting this repo locally
 
