@@ -39,15 +39,27 @@ Goto Jenkins --> Manage Jenkins --> Global Tool Configuration and setup the tool
 
 Add a NodeJS installation like the following (the names are important, so match them)
 
-<img src=doc/images/NodeJS_config.jpg alt="NodeJS config" />
 ![NodeJS config](./doc/images/NodeJS_config.jpg)
 
 ### 3. Configure Credentials in Jenkins 
 
-#### 3.1 veracode login
+Goto Jenkins --> Manage Jenkins --> Configure Credentials --> Credentials and add the following to the Jenkins store, global domain:
 
-#### 3.2 srcclr token
+#### 3.1 Veracode login
 
+Add a 'username with password' credential with the following:
+
+![API ID and Key](./doc/images/API_creds.jpg)
+
+The username is your API-ID and the password is your API-Key.  The ID field must be "veracode_login" (to match the Jenkinsfile).  The Description field can be anything.
+
+#### 3.2 Srcclr token
+
+Add a 'secret text' credential with the following:
+
+![srcclr token](./doc/images/Srcclr_token.jpg)
+
+The 'Secret' is the Source Clear token (please use a workspace agent, not an org-level agent).  The ID must be "SCA_Token" (to match the Jenkinsfile).  The Description field can be anything.
 
 ### 4. Create the Jenkins job
 
