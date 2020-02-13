@@ -11,16 +11,13 @@ build_frontend:
     cache:
         paths:
         - node_modules/
-    artifacts:
-        paths:
-            - .
 
 veracode_frontend:
     image: openjdk:8-alpine
     stage: security
     before_script:
         - wget https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/19.2.5.6/vosp-api-wrappers-java-19.2.5.6.jar -O VeracodeJavaAPI.jar
-        - tar -zcvf upload.tar.gz src package.json package-lock.json
+        - tar -zcvf upload.tar.gz app package.json package-lock.json
         - ls -lF
     script:
         # the scan WILL fail, so just fire and forget
@@ -49,11 +46,11 @@ dockerize:
         - apk add --update python3
         - pip3 install awscli
     script:
-        #- $(aws ecr get-login --no-include-email --region us-east-2)
+        - $(aws ecr get-login --no-include-email --region us-east-2)
         - docker build -t nodegoat:$CI_PIPELINE_ID .
         - docker tag nodegoat:$CI_PIPELINE_ID $REPOSITORY_URL:latest
         - docker tag nodegoat:$CI_PIPELINE_ID $REPOSITORY_URL:$CI_PIPELINE_ID
-        #- docker push $REPOSITORY_URL:latest
-        #- docker push $REPOSITORY_URL:$CI_PIPELINE_ID
+        - docker push $REPOSITORY_URL:latest
+        - docker push $REPOSITORY_URL:$CI_PIPELINE_ID
     after_script:
         - docker images
