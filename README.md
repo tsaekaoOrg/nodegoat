@@ -26,7 +26,7 @@ The instructions below assume you are building using the Jenkins installed on yo
 You will need the following plugins added to Jenkins, beyond what's already here in the 2019.4 images:
 
 * Pipeline Utility Steps
-* NodeJS (w/tool config)
+* NodeJS
 * AnsiColor
 
 Goto Jenkins --> Manage Jenkins --> Manage Plugins and add these
