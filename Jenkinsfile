@@ -27,7 +27,7 @@ pipeline {
                     }
                     else {
                         bat 'dir'
-                        bat 'set %PATH%'
+                        bat 'echo %PATH%'
                     }
                 }
             }
