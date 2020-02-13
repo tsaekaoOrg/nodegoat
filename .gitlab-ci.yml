@@ -1,0 +1,60 @@
+stages:
+    - build
+    - security
+    - deploy
+
+build_frontend:
+    image: node:10.9.0
+    stage: build
+    cache:
+        paths:
+        - node_modules/
+    script: 
+        - npm install
+        - npm run build
+    artifacts:
+        paths:
+            - .
+
+veracode_frontend:
+    image: openjdk:8-alpine
+    stage: security
+    before_script:
+        - wget https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/19.2.5.6/vosp-api-wrappers-java-19.2.5.6.jar -O VeracodeJavaAPI.jar
+        - tar -zcvf upload.tar.gz src package.json package-lock.json
+        - ls -lF
+    script:
+        # the scan WILL fail, so just fire and forget
+        - java -jar VeracodeJavaAPI.jar -vid $VERACODE_API_ID -vkey $VERACODE_API_KEY
+            -action UploadAndScan -appname "VulnImages-NodeGoat" -createprofile false
+            -filepath upload.tar.gz -version "Commit ${CI_COMMIT_SHA:0:8} - Job $CI_JOB_ID"
+    allow_failure: true
+
+srcclr_frontend:
+    image: node:10.9.0
+    stage: security
+    script:
+        - curl -sSL https://download.sourceclear.com/ci.sh | sh
+                    
+dockerize:
+    image: docker:stable
+    stage: deploy
+    variables:
+    #     DOCKER_HOST: tcp://docker:2375
+        DOCKER_DRIVER: overlay2
+        REPOSITORY_URL: $REPO_URL
+    services:
+        # docker:19.03+ has TLS on by default, see https://gitlab.com/gitlab-org/gitlab-runner/issues/4501#workaround
+        - docker:18.09-dind
+    before_script:
+        - apk add --update python3
+        - pip3 install awscli
+    script:
+        #- $(aws ecr get-login --no-include-email --region us-east-2)
+        - docker build -t nodegoat:$CI_PIPELINE_ID .
+        - docker tag nodegoat:$CI_PIPELINE_ID $REPOSITORY_URL:latest
+        - docker tag nodegoat:$CI_PIPELINE_ID $REPOSITORY_URL:$CI_PIPELINE_ID
+        #- docker push $REPOSITORY_URL:latest
+        #- docker push $REPOSITORY_URL:$CI_PIPELINE_ID
+    after_script:
+        - docker images
