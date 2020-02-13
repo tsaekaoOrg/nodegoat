@@ -48,9 +48,9 @@ dockerize:
     script:
         - $(aws ecr get-login --no-include-email --region us-east-2)
         - docker build -t nodegoat:$CI_PIPELINE_ID .
-        - docker tag nodegoat:$CI_PIPELINE_ID $REPOSITORY_URL/nodegoat:latest
-        - docker tag nodegoat:$CI_PIPELINE_ID $REPOSITORY_URL/nodegoat:$CI_PIPELINE_ID
-        - docker push $REPOSITORY_URL/nodegoat:latest
-        - docker push $REPOSITORY_URL/nodegoat:$CI_PIPELINE_ID
+        - docker tag nodegoat:$CI_PIPELINE_ID $REPOSITORY_URL:nodegoat-latest
+        - docker tag nodegoat:$CI_PIPELINE_ID $REPOSITORY_URL:nodegoat-$CI_PIPELINE_ID
+        - docker push $REPOSITORY_URL:nodegoat-latest
+        - docker push $REPOSITORY_URL:nodegoat-$CI_PIPELINE_ID
     after_script:
         - docker images
