@@ -3,6 +3,7 @@ stages:
     - security
     - deploy
 
+# for a simple node.js build, this step is (almost) meaningless
 build_frontend:
     image: node:10.9.0
     stage: build
@@ -10,7 +11,10 @@ build_frontend:
         - npm install
     cache:
         paths:
-        - node_modules/
+            - node_modules/
+    artifacts:
+        paths:
+            - node_modules/
 
 veracode_frontend:
     image: openjdk:8-alpine
