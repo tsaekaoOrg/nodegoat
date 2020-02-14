@@ -4,7 +4,7 @@ stages:
     - deploy
 
 # for a simple node.js build, this step is (almost) meaningless
-build_frontend:
+build_app:
     image: node:10.9.0
     stage: build
     script: 
@@ -16,7 +16,7 @@ build_frontend:
         paths:
             - node_modules/
 
-veracode_frontend:
+veracode_scan:
     image: openjdk:8-alpine
     stage: security
     before_script:
@@ -30,7 +30,7 @@ veracode_frontend:
             -filepath upload.tar.gz -version "Commit ${CI_COMMIT_SHA:0:8} - Job $CI_JOB_ID"
     allow_failure: true
 
-srcclr_frontend:
+veracode_sca_scan:
     image: node:10.9.0
     stage: security
     script:
