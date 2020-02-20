@@ -72,7 +72,7 @@ pipeline {
                                 sh """
                                     curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
                                     unzip pipeline-scan-LATEST.zip pipeline-scanner-java.jar
-                                    java -jar pipeline-scan-java.jar --veracode_api_id '${VERACODE_API_ID}' --veracode_api_key '${VERACODE_API_SECRET}' --file upload.zip
+                                    java -jar pipeline-scan-java.jar --veracode_api_id '${VERACODE_API_ID}' --veracode_api_key '${VERACODE_API_KEY}' --file upload.zip
                                     """
                             }
                             else {
