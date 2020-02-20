@@ -63,40 +63,33 @@ pipeline {
                 //  aka skip things like node_modules directory
                 zip zipFile: 'upload.zip', archive: false, glob: '*.js,*.json,app/**,artifacts/**,config/**'
 
-                script {
-                    if(isUnix() == true) {
-                        env.HOST_OS = 'Unix'
-                    }
-                    else {
-                        env.HOST_OS = 'Windows'
-                    }
-                }
-
                 echo 'Veracode Pipeline scanning'
                 withCredentials([ usernamePassword ( 
                     credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
+                        script {
 
-                        if(isUnix() == true) {
-                            sh """
-                                curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-                                unzip pipeline-scan-LATEST.zip pipeline-scanner-java.jar
-                                java -jar pipeline-scan-java.jar --veracode_api_id '${VERACODE_API_ID}' --veracode_api_key '${VERACODE_API_SECRET}' --file upload.zip
-                                """
-                        }
-                        else {
-                            // allow-dirty since I was in the middle of updating the readme files,
-                            //      really not needed
-                            powershell '''
-                                        Set-ExecutionPolicy AllSigned -Scope Process -Force
-                                        iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
-                                        srcclr scan --allow-dirty
-                                        '''
-                        }
+                            if(isUnix() == true) {
+                                sh """
+                                    curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+                                    unzip pipeline-scan-LATEST.zip pipeline-scanner-java.jar
+                                    java -jar pipeline-scan-java.jar --veracode_api_id '${VERACODE_API_ID}' --veracode_api_key '${VERACODE_API_SECRET}' --file upload.zip
+                                    """
+                            }
+                            else {
+                                // allow-dirty since I was in the middle of updating the readme files,
+                                //      really not needed
+                                powershell '''
+                                            Set-ExecutionPolicy AllSigned -Scope Process -Force
+                                            iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
+                                            srcclr scan --allow-dirty
+                                            '''
+                            }
 
                         // fire-and-forget 
                         //veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}-${env.HOST_OS}", uploadExcludesPattern: '', uploadIncludesPattern: 'upload.zip', useIDkey: true, vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
 
-                    }      
+                        }    
+                    }  
             }
         }
     }
