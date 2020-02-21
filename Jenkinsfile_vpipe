@@ -52,7 +52,6 @@ pipeline {
                             bat 'npm install'  
                         }
                     }
-
                 }
             }
         }
@@ -74,22 +73,17 @@ pipeline {
                                     unzip pipeline-scan-LATEST.zip pipeline-scan.jar
                                     java -jar pipeline-scan.jar --veracode_api_id '${VERACODE_API_ID}' \
                                         --veracode_api_key '${VERACODE_API_KEY}' \
+                                        --fail_on_severity '' \
                                         --file upload.zip
                                     """
                             }
                             else {
-                                // allow-dirty since I was in the middle of updating the readme files,
-                                //      really not needed
                                 powershell '''
                                             Set-ExecutionPolicy AllSigned -Scope Process -Force
                                             iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
                                             srcclr scan --allow-dirty
                                             '''
                             }
-
-                        // fire-and-forget 
-                        //veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}-${env.HOST_OS}", uploadExcludesPattern: '', uploadIncludesPattern: 'upload.zip', useIDkey: true, vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
-
                         }    
                     }  
             }
