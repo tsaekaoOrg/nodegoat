@@ -66,28 +66,31 @@ pipeline {
                 withCredentials([ usernamePassword ( 
                     credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
                         script {
+                            try {
 
-                            if(isUnix() == true) {
-                                sh """
-                                    curl -sO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-                                    unzip pipeline-scan-LATEST.zip pipeline-scan.jar
-                                    java -jar pipeline-scan.jar --veracode_api_id '${VERACODE_API_ID}' \
-                                        --veracode_api_key '${VERACODE_API_KEY}' \
-                                        --fail_on_severity '' \
-                                        --file upload.zip
-                                    """
-                            }
-                            else {
-                                powershell '''
-                                            Set-ExecutionPolicy AllSigned -Scope Process -Force
-                                            iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
-                                            srcclr scan --allow-dirty
-                                            '''
+                                if(isUnix() == true) {
+                                    sh """
+                                        curl -sO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+                                        unzip pipeline-scan-LATEST.zip pipeline-scan.jar
+                                        java -jar pipeline-scan.jar --veracode_api_id '${VERACODE_API_ID}' \
+                                            --veracode_api_key '${VERACODE_API_KEY}' \
+                                            --file upload.zip
+                                        """
+                                }
+                                else {
+                                    powershell '''
+                                                Set-ExecutionPolicy AllSigned -Scope Process -Force
+                                                iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
+                                                srcclr scan --allow-dirty
+                                                '''
+                                }
+                            } catch (err) {
+                                echo 'Pipeline err: ' + err
                             }
                         }    
                     } 
 
-                    echo "Pipeline scan done (failures ignored, results avialable in ${WORKSPACE}/results.json file)"
+                    echo "Pipeline scan done (failures ignored, results avialable in ${WORKSPACE}/results.json)"
             }
         }
     }
