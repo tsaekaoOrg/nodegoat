@@ -31,6 +31,9 @@ You will need the following plugins added to Jenkins, beyond what's already here
 
 Goto Jenkins --> Manage Jenkins --> Manage Plugins and add these
 
+For Windows only, you will probably need to tell git to handle long filenames (you will see an error during the git clean phase of the build about 'filename too long').  To do this, open a Cmd or Powershell prompt and enter:
+``` git config --system core.longpaths true``` and then restart Jenkins (http://localhost:8082/restart).  Ignore any scary error messages, reload the page if necessary.  Jenkins will take about a minute to restart.
+
 ### 2. Configure the tools
 
 Goto Jenkins --> Manage Jenkins --> Global Tool Configuration and setup the tools
@@ -66,6 +69,8 @@ The 'Secret' is the Source Clear token (please use a workspace agent, not an org
 Create a Jenkins Pipeline job with the following Pipeline section (you can ignore all the other fields):
 
 ![jenkins job](./doc/images/Jenkins_job.jpg)
+
+Note: for the Pipeline scanner, use 'Jenkinsfile_vpipe' as the Script Path.
 
 ### 5. Build w/Jenkins
 
