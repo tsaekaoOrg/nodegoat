@@ -1,4 +1,4 @@
-FROM node:4.4
+FROM node:10.19.0
 
 ENV user nodegoat_docker
 ENV workdir /usr/src/app/
