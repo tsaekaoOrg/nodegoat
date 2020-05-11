@@ -97,12 +97,11 @@ pipeline {
                                 //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
                             }
                             else {
-                                // allow-dirty since I was in the middle of updating the readme files,
-                                //      really not needed
                                 powershell '''
                                             Set-ExecutionPolicy AllSigned -Scope Process -Force
+                                            $ProgressPreference = "silentlyContinue"
                                             iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
-                                            srcclr scan --allow-dirty
+                                            srcclr scan
                                             '''
                             }
                         }
