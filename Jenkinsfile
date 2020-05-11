@@ -49,7 +49,7 @@ pipeline {
                         }
                         else {
                             bat 'npm --version'
-                            bat 'npm install'  
+                            bat 'npm ci'  
                         }
                     }
 
