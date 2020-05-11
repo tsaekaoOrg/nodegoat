@@ -48,8 +48,10 @@ pipeline {
                             sh 'npm install'
                         }
                         else {
+                            // 'npm install' will over-write the package-lock.json file, which will cause 
+                            //      problems for SCA - 'uncommitted changes' (but only on Windows)
                             bat 'npm --version'
-                            bat 'npm ci'  
+                            bat 'npm install --no-save'  
                         }
                     }
 
