@@ -5,17 +5,16 @@ This project is designed to show the complete SDLC with all of our Veracode tool
 * building and packaging the app for scanning
 * Veracode scanning of first party code
 * Veracode SCA scanning of third-party code
-* building a Docker image for deployment and Veracode dynamic scanning (coming in the future)
+* building a Docker image for deployment and Veracode dynamic scanning (*nix only)
 
 This is a Veracode-specific readme file.  For the original, see README-original.md.
 
 # How to use this
 
-You have 3 options:
+You have 2 options:
 
 1. build from the existing repo (not making any modifications)
 2. create a copy (fork) the existing repo for the ability to make your own mods and then build your modified copy
-3. just deploy the existing app for dynamic scanning (coming in the future...)
 
 ## Option 1 - Build from the existing repo
 
@@ -88,6 +87,4 @@ Fork the existing repo into your account, and then use your copy of the repo.  C
 
 Follow the steps above, except use your repo instead of the master copy on gitlab.com
 
-## Deploying 
 
-Coming...
