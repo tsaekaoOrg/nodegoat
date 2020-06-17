@@ -47,7 +47,7 @@ dockerize:
         # docker:19.03+ has TLS on by default, see https://gitlab.com/gitlab-org/gitlab-runner/issues/4501#workaround
         - docker:18.09-dind
     before_script:
-        - apk add --update python3
+        - apk add --update python3 py-pip
         - pip3 install awscli
     script:
         - $(aws ecr get-login --no-include-email --region us-east-2)
