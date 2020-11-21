@@ -19,6 +19,9 @@ build_app:
 veracode_scan:
     image: veracode/api-wrapper-java:latest
     stage: security
+    before_script:
+        - tar -zcvf upload.tar.gz app package.json package-lock.json
+        - ls -lF
     script:
         # the scan WILL fail, so just fire and forget
         - java -jar /opt/veracode/api-wrapper.jar -vid $VERACODE_API_ID -vkey $VERACODE_API_KEY
