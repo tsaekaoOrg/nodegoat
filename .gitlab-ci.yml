@@ -17,15 +17,11 @@ build_app:
             - node_modules/
 
 veracode_scan:
-    image: openjdk:8-alpine
+    image: veracode/api-wrapper-java:latest
     stage: security
-    before_script:
-        - wget https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/19.2.5.6/vosp-api-wrappers-java-19.2.5.6.jar -O VeracodeJavaAPI.jar
-        - tar -zcvf upload.tar.gz app package.json package-lock.json
-        - ls -lF
     script:
         # the scan WILL fail, so just fire and forget
-        - java -jar VeracodeJavaAPI.jar -vid $VERACODE_API_ID -vkey $VERACODE_API_KEY
+        - java -jar /opt/veracode/api-wrapper.jar -vid $VERACODE_API_ID -vkey $VERACODE_API_KEY
             -action UploadAndScan -appname "VulnImages-NodeGoat" -createprofile false
             -filepath upload.tar.gz -version "Commit ${CI_COMMIT_SHA:0:8} - Job $CI_JOB_ID"
     allow_failure: true
@@ -40,7 +36,6 @@ dockerize:
     image: docker:stable
     stage: deploy
     variables:
-    #     DOCKER_HOST: tcp://docker:2375
         DOCKER_DRIVER: overlay2
         REPOSITORY_URL: $REPO_URL
     services:
