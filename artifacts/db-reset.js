@@ -57,10 +57,10 @@ MongoClient.connect(config.db, function(err, db) {
     var usersCol, allocationsCol, countersCol;
 
     if (err) {
-        console.log("ERROR: connect");
+        console.log("DB-RESET: ERROR: connect");
         console.log(JSON.stringify(err));
     }
-    console.log("Connected to the database: " + config.db);
+    console.log("DB-RESET: Connected to the database: " + config.db);
 
     // remove existing data (if any), we don't want to look for errors here
     db.dropCollection("users");
