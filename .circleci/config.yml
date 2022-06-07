@@ -1,13 +1,16 @@
+155 lines (127 sloc)  4.12 KB
+   
 # Javascript Node CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
+
 version: 2
 jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:7.10
+      - image: circleci/node:10.19.0
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -26,7 +29,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: yarn install
+      - run: npm install
 
       - save_cache:
           paths:
@@ -34,14 +37,43 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: yarn test
+      - run: npm test
       
       # keep the files around for the scan job
       - persist_to_workspace:
           root: ..
           paths:
             - nodegoat
+
+  # run the Veracode Pipeline scan
+  veracode_pipeline_scan:
+
+    # use the official Veracode Docker image
+    docker:
+      - image: veracode/pipeline-scan:latest
       
+    working_directory: ~/repo
+    
+    steps:
+      # get the files from the previous job
+      - attach_workspace:
+          at: .
+          
+      # 'package' for uploading to Veracode
+      - run: 
+          name: "Package for upload to Veracode"
+          #command: zip -r upload.zip nodegoat
+          command: zip -r upload.zip nodegoat -x *node_modules/*
+
+      # upload for scanning
+      # env vars are used to pass login creds and set the scan name
+      - run:
+          name: "Upload to Veracode"
+          command: java -jar /opt/veracode/pipeline-scan.jar 
+              -vid $VERACODE_API_ID 
+              -vkey $VERACODE_API_KEY 
+              --file upload.zip
+
   # job to upload to Veracode for scanning
   veracode_scan:
 
@@ -79,7 +111,7 @@ jobs:
   srcclr_scan:
     docker:
       # specify the version you desire here
-      - image: circleci/node:7.10
+      - image: circleci/node:10.19.0
 
     working_directory: ~/repo
 
@@ -94,7 +126,6 @@ jobs:
           command: |
             cd nodegoat
             curl -sSL https://download.sourceclear.com/ci.sh | bash
-
 # serial jobs - need to run 'build' before 'scan'
 workflows:
   version: 2
@@ -108,3 +139,11 @@ workflows:
           requires:
             - build
 
+# workflows:
+#   version: 2
+#   build_and_pipeline_scan:
+#     jobs:
+#       - build
+#       - veracode_pipeline_scan:
+#           requires:
+#             - build
