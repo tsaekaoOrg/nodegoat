@@ -1,0 +1,2 @@
+veracode_static_scan:
+policy: 'SCA_Custom'
