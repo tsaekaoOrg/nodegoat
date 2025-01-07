@@ -87,7 +87,7 @@ Fork the existing repo into your account, and then use your copy of the repo.  C
 
 Follow the steps above, except use your repo instead of the master copy on gitlab.com
 
-1/7/2025 - TEST2
+1/7/2025 - Testing
 TEST2
 More Testing
 TEST3
